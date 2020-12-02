@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">-->
+  <!--  <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">-->
+  <!--  <meta charset="UTF-8">-->
+  <!--  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <style>
+      .done {
+          text-decoration: line-through;
+      }
+
+      [v-cloak] {
+          display: none;
+      }
+      .v-application--wrap {
+          min-height: auto
+      }
+  </style>
+  <title>Задачи</title>
+</head>
+<body>
+<div id="app" v-cloak>
+  <v-app :dark="isDark">
+    <v-app-bar color="blue darken-4"
+               :dark="isDark">
+      <v-app-bar-nav-icon :dark="isDark"></v-app-bar-nav-icon>
+      <v-toolbar-title :dark="isDark" class="headline">Список дел</v-toolbar-title>
+
+      <v-spacer></v-spacer>
+
+      <v-tooltip :dark="isDark" bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn icon @click="show = !show" v-on="on">
+            <v-icon v-model="isDark"
+                    @click="isDark = !isDark">
+              {{ show ? 'check_circle' : 'check_circle_outline' }}
+            </v-icon>
+          </v-btn>
+        </template>
+        <span>{{isDark ? 'Светлая тема' : 'Темная тема'}}</span>
+      </v-tooltip>
+    </v-app-bar>
+    <v-container :dark="isDark">
+      <v-layout row
+                :dark="isDark"
+                justify-center>
+        <v-flex xs12>
+          <v-card :dark="isDark">
+            <v-list two-line
+                    :dark="isDark"
+                    subheader>
+              <v-container>
+                <v-subheader :dark="isDark"
+                             class="headline">
+                  {{new Date() | date}}
+                </v-subheader>
+                <v-spacer></v-spacer>
+
+                <p class="text-xs-right"><b>{{todos.length}}</b> Задач</p>
+
+                <v-flex xs12>
+                  <v-text-field
+                      clearable
+                      v-model="todoTitle"
+                      id="newTodo"
+                      name="newTodo"
+                      label="Введите название задачи"
+                      @keyup.enter="addTodo"
+                      :dark="isDark"
+                  >
+                  </v-text-field>
+                </v-flex>
+              </v-container>
+              <v-subheader class="subheading"
+                           :dark="isDark"
+                           v-if="todos.length === 0">
+                У вас 0 задач, добавьте новую
+              </v-subheader>
+              <v-subheader class="subheading"
+                           :dark="isDark"
+                           v-else>
+                Ваши задачи
+              </v-subheader>
+              <div v-for="(todo, i) in todos" :key="i">
+                <v-list-item :dark="isDark">
+                  <v-list-item-action :dark="isDark">
+                    <v-checkbox v-if="!todo.done"
+                                v-model="todo.done"
+                                @change="completeTodo(todo.id)"
+                                :dark="isDark">
+
+                    </v-checkbox>
+                  </v-list-item-action>
+                  <v-list-item-content :dark="isDark">
+                    <v-list-item-title :dark="isDark"
+                                       :class="{done: todo.done}">
+                      {{todo.title | capitalize}}
+                    </v-list-item-title>
+                    <v-list-item-subtitle>
+                      Добавлено в: {{todo.createdAt | date(true)}}
+                      (изменено {{todo.updatedAt | date(true)}})
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                  <v-btn icon ripple
+                         color="red"
+                         :dark="isDark"
+                         @click="removeTodo(todo.id)">
+                    <v-icon   :dark="isDark" >close</v-icon>
+                  </v-btn>
+                </v-list-item>
+              </div>
+            </v-list>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-app>
+</div>
+
+<!--<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>
